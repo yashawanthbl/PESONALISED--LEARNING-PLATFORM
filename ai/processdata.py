@@ -5,14 +5,21 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 
+# Download necessary NLTK data
 nltk.download('punkt')
 nltk.download('stopwords')
 
+# Define file paths
 csv_file_path = "/mnt/data/historical_user_data.csv"
-df = pd.read_csv(csv_file_path)
 
+# Load existing data (if needed)
+try:
+    df = pd.read_csv(csv_file_path)
+except FileNotFoundError:
+    df = pd.DataFrame()  # fallback if the original file doesn't exist
+
+# Generate new data points
 num_new_data_points = 100
-
 new_data = {
     'Gender': np.random.choice(['Male', 'Female', 'Non-binary'], num_new_data_points),
     'Year of Study': np.random.randint(1, 5, num_new_data_points),
@@ -36,6 +43,7 @@ new_data = {
 
 new_df = pd.DataFrame(new_data)
 
+# Preprocess text data
 stop_words = set(stopwords.words('english'))
 ps = PorterStemmer()
 
@@ -48,10 +56,10 @@ def process_text(text):
 new_df['Processed Course Title'] = new_df['Course Title'].apply(process_text)
 new_df['Processed Branch'] = new_df['Branch'].apply(process_text)
 
+# Save to CSV and JSON
 new_csv_file_path = "/mnt/data/new_historical_user_data_nltk_processed.csv"
-new_df.to_csv(new_csv_file_path, index=False)
-
 new_json_file_path = "/mnt/data/new_historical_user_data_nltk_processed.json"
+new_df.to_csv(new_csv_file_path, index=False)
 new_df.to_json(new_json_file_path, orient='records')
 
 new_csv_file_path, new_json_file_path

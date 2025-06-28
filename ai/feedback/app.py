@@ -19,7 +19,6 @@ def feedback():
         email = request.form['email']
         message = request.form['message']
 
-        # Insert the feedback into MongoDB
         feedback_data = {
             'name': name,
             'email': email,
@@ -27,8 +26,7 @@ def feedback():
         }
         collection.insert_one(feedback_data)
 
-        # After submission, render the thank you page
-        return render_template('thankyou.html')
+        return render_template('thankyou.html', name=name)
     return redirect('/')
 
 if __name__ == '__main__':

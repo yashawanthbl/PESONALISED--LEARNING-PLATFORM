@@ -1,54 +1,45 @@
-
 import google.generativeai as genai
 
-# Configure the API key 
-api_key = "AIzaSyBL53dBWILLEXRREDVG9x8C2nk1lztEKkI"
+# Configure the API key (you should ideally use an environment variable here)
+api_key = "YOUR_GEMINI_API_KEY"  # ⚠️ REPLACE this with os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 
-# Create the model
+# Model config
 generation_config = {
-  "temperature": 1,
-  "top_p": 0.95,
-  "top_k": 64,
-  "max_output_tokens": 8192,
-  "response_mime_type": "text/plain",
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+    "response_mime_type": "text/plain",
 }
 
+# Load Gemini model
 model = genai.GenerativeModel(
-  model_name="gemini-1.5-pro",
-  generation_config=generation_config,
-
+    model_name="gemini-1.5-pro",
+    generation_config=generation_config,
 )
 
-chat_session = model.start_chat(
-  history=[
+# Start chat session with instructions
+chat_session = model.start_chat(history=[
     {
-      "role": "user",
-      "parts": [
-        "Generate A Roadmap  for following detail by user interest area Name use this area  name to create an full roadmap along with a  course  video and book links id it all in j son formet\n",
-      ],
+        "role": "user",
+        "parts": [
+            "Generate a Roadmap in JSON format for the following interest area. "
+            "Include chapters, key learning goals, 2–3 YouTube video links, and book links.\n\n"
+            "User Interest Area: HTML"
+        ],
     },
     {
-      "role": "model",
-      "parts": [
-        "Please provide me with the user's interest area so I can create a roadmap. \n\nFor example:\n\n\"User Interest Area: **Machine Learning**\" \n\nOnce you give me the area, I'll generate a JSON formatted roadmap including courses, videos, and book recommendations. \n",
-      ],
-    },
-    {
-      "role": "user",
-      "parts": [
-        "Generate A MCQ for the following details by user interest area name use this area name to create an 10 MCQ along with a questions options answers. And validate it also marks\n\n",
-      ],
-    },
-    {
-      "role": "model",
-      "parts": [
-        "Please provide the user's interest area so I can create relevant MCQs. \n\nFor example: \n\n\"User Interest Area: **JavaScript**\" \n\nOnce you provide the area, I'll generate 10 MCQs with options, correct answers, and explanations. \n",
-      ],
-    },
-  ]
-)
+        "role": "user",
+        "parts": [
+            "Generate 10 multiple-choice questions (MCQs) for the topic HTML. "
+            "Include question, 4 options, correct answer, and 1-line explanation. Return as JSON."
+        ],
+    }
+])
 
+# Ask the final prompt (can be varied for different topics)
 response = chat_session.send_message("HTML")
 
+# Output the response
 print(response.text)
