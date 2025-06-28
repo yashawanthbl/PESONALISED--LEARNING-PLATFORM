@@ -1,0 +1,21 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+
+
+# Ignore system files
+.DS_Store
+
+# Ignore IDE files
+.vscode/
+.idea/
+venv/
+__pycache__/
+*.pyc
+.env
+*.log
+*.sqlite3
+.DS_Store
+.idea/
+*.egg-info/
